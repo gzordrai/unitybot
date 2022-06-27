@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Discord bot allowing verification of new users, role assignment and administration commands",
   "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/bot.ts"
+  },
   "repository": "https://github.com/gzordrai/UnityBot",
   "author": "gzordrai <40698142+gzordrai@users.noreply.github.com>",
   "license": "Apache-2.0",
