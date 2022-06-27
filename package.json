@@ -1,0 +1,19 @@
+{
+  "name": "UnityBot",
+  "version": "1.0.0",
+  "description": "Discord bot allowing verification of new users, role assignment and administration commands",
+  "main": "index.js",
+  "repository": "https://github.com/gzordrai/UnityBot",
+  "author": "gzordrai <40698142+gzordrai@users.noreply.github.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "fs": "^0.0.1-security",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  }
+}
