@@ -1,4 +1,4 @@
-import { Client, Intents } from "discord.js";
+import { Client, GatewayIntentBits, Partials  } from "discord.js";
 import { config } from "dotenv";
 import { JsonDB } from "node-json-db";
 import { Config } from "node-json-db/dist/lib/JsonDBConfig";
@@ -11,10 +11,13 @@ config({ path: path.resolve(__dirname, "../.env") })
 const token: string = process.env.TOKEN!;
 const client: Client = new Client({
     intents: [
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages
+    ],
+    partials: [
+        Partials.Channel,
+        Partials.GuildMember
     ]
 });
 const database: JsonDB = new JsonDB(new Config(path.resolve(__dirname, "../data/database.json"), true, false, '/'));
