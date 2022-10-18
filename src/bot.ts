@@ -13,11 +13,9 @@ const client: Client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages
     ],
     partials: [
         Partials.Channel,
-        Partials.GuildMember
     ]
 });
 const database: JsonDB = new JsonDB(new Config(path.resolve(__dirname, "../data/database.json"), true, false, '/'));
