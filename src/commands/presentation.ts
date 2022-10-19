@@ -39,6 +39,7 @@ export const test: ICommand = {
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor("Blue")
             .setTitle(`Présentation de ${interaction.user.username}`)
+            .setThumbnail(interaction.user.displayAvatarURL())
             .addFields(
                 { name : "Métier et études:", value: `${data[0].value}`},
                 { name : "Qui êtes vous:", value: `${data[1].value}`},
