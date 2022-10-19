@@ -36,7 +36,7 @@ export const test: ICommand = {
     run: async (client: Client, interaction: CommandInteraction, database: JsonDB) => {
         const data: readonly CommandInteractionOption<CacheType>[] = interaction.options.data;
 
-        const embed = new EmbedBuilder()
+        const embed: EmbedBuilder = new EmbedBuilder()
             .setColor("Blue")
             .setTitle(`Présentation de ${interaction.user.username}`)
             .addFields(

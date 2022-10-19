@@ -7,7 +7,7 @@ export const test: ICommand = {
     type: ApplicationCommandType.ChatInput,
     run: async (client: Client, interaction: CommandInteraction) => {
         const avatarURL: string = interaction.guild?.members.cache.get(process.env.OWNER_ID!)?.displayAvatarURL()!;
-        const embed = new EmbedBuilder()
+        const embed: EmbedBuilder = new EmbedBuilder()
             .setColor("Blue")
             .setTitle("UnityBot")
             .setURL("https://github.com/gzordrai/UnityBot")
