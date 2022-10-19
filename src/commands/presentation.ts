@@ -36,6 +36,9 @@ export const test: ICommand = {
     run: async (client: Client, interaction: CommandInteraction, database: JsonDB) => {
         const data: readonly CommandInteractionOption<CacheType>[] = interaction.options.data;
 
+        if(interaction.channel?.id !== process.env.PRESENTATION_CHANNEL_ID)
+            return await interaction.followUp({ content: "Vous n'êtes pas dans le channel de présentation !", ephemeral: true });
+
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor("Blue")
             .setTitle(`Présentation de ${interaction.user.username}`)
@@ -49,9 +52,6 @@ export const test: ICommand = {
 
         database.push(`/${interaction.user.id}/presentation`, true, true);
 
-        await interaction.followUp({
-            ephemeral: true,
-            embeds: [embed]
-        });
+        return await interaction.followUp({ embeds: [embed] });
     }
 }
