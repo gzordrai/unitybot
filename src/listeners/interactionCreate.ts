@@ -5,10 +5,22 @@ import { ICommand } from "../ICommand";
 
 export default (client: Client, database: JsonDB): void => {
     client.on("interactionCreate", async (interaction: Interaction) => {
+
+        if(!(await database.exists(`/${interaction.user.id}`)))
+            database.push(`/${interaction.user.id}`, { role: false, presentation: false }, true);
+
         if (interaction.isCommand())
             await handleSlashCommand(client, interaction, database);
         else if (interaction.isButton())
             await handleButton(client, interaction, database);
+
+        if((await database.getData(`/${interaction.user.id}/role`)) === true && (await database.getData(`/${interaction.user.id}/presentation`)) === true) {
+            if(interaction.inCachedGuild()) {
+                const role: Role = interaction.guild.roles.cache.get(process.env.MEMBER_ROLE_ID!)!;
+
+                interaction.member.roles.add(role);
+            }
+        }
     })
 }
 
@@ -34,17 +46,14 @@ const handleButton = async (client: Client, interaction: ButtonInteraction, data
         message += `Le rôle ${role.name}`;
 
         if(!userRoles.cache.get(role.id)) {
-            interaction.member.roles.add(role);
+            userRoles.add(role);
             message += " a été ajouté avec succès !";
         } else {
-            interaction.member.roles.remove(role);
+            userRoles.remove(role);
             message += " a été supprimé avec succès !";
         }
 
-        if(!(await database.exists(`/${interaction.user.id}`)))
-            database.push(`/${interaction.user.id}`, { role: true, presentation: false }, true);
-        else
-            database.push(`/${interaction.user.id}/role`, true, true);
+        database.push(`/${interaction.user.id}/role`, true, true);
     }
 
     await interaction.reply({ content: message, ephemeral: true });
