@@ -37,13 +37,15 @@ const handleSlashCommand = async (client: Client, interaction: CommandInteractio
 }
 
 const handleButton = async (client: Client, interaction: ButtonInteraction, database: JsonDB): Promise<void> => {
-    let message: string = "";
+    let message: string = "-";
+
+    await interaction.deferReply({ ephemeral: true })
 
     if(interaction.inCachedGuild()) {
         const role: Role = interaction.guild.roles.cache.get(interaction.customId)!;
         const userRoles: GuildMemberRoleManager = interaction.member.roles;
 
-        message += `Le rôle ${role.name}`;
+        message = `Le rôle ${role.name}`;
 
         if(!userRoles.cache.get(role.id)) {
             userRoles.add(role);
@@ -56,5 +58,5 @@ const handleButton = async (client: Client, interaction: ButtonInteraction, data
         database.push(`/${interaction.user.id}/role`, true, true);
     }
 
-    await interaction.reply({ content: message, ephemeral: true });
+    await interaction.editReply({ content: message });
 }
