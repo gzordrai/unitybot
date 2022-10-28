@@ -27,13 +27,12 @@ export default (client: Client, database: JsonDB): void => {
 const handleSlashCommand = async (client: Client, interaction: CommandInteraction, database: JsonDB): Promise<void> => {
     const slashCommand: ICommand | undefined = commands.find((c: ICommand) => c.name === interaction.commandName);
 
-    if (!slashCommand) {
+    if (!slashCommand)
         interaction.followUp({ content: "An error has occurred" });
-        return;
+    else {
+        await interaction.deferReply();
+        slashCommand.run(client, interaction, database);
     }
-
-    await interaction.deferReply();
-    slashCommand.run(client, interaction, database);
 }
 
 const handleButton = async (client: Client, interaction: ButtonInteraction, database: JsonDB): Promise<void> => {
