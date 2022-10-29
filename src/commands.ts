@@ -2,7 +2,7 @@ import { readdirSync } from "fs";
 import path from "path";
 import { ICommand } from "./ICommand";
 
-const files: string[] = readdirSync(path.resolve(__dirname, "commands")).filter((file: string) => file.endsWith(".ts"));
+const files: string[] = readdirSync(path.resolve(__dirname, "commands")).filter((file: string) => file.endsWith(".js") || file.endsWith(".ts"));
 let cmds: ICommand[] = new Array<ICommand>();
 
 for (const file of files) {
