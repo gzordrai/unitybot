@@ -1,11 +1,11 @@
-import { ApplicationCommandType, CommandInteraction, Client, EmbedBuilder } from "discord.js";
-import { ICommand } from "../ICommand";
+import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ExtendedClient, ICommand } from "../bot";
 
-export const test: ICommand = {
-    name: "repo",
-    description: "Le repo git du bot",
-    type: ApplicationCommandType.ChatInput,
-    run: async (client: Client, interaction: CommandInteraction) => {
+export const command: ICommand = {
+    data: new SlashCommandBuilder()
+        .setName("git")
+        .setDescription("Le dépot git du bot"),
+    async execute(client: ExtendedClient, interaction: CommandInteraction): Promise<void> {
         const avatarURL: string = interaction.guild?.members.cache.get(process.env.OWNER_ID!)?.displayAvatarURL()!;
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor("Blue")
@@ -19,3 +19,5 @@ export const test: ICommand = {
         });
     }
 }
+
+export default command;
