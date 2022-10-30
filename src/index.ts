@@ -31,9 +31,9 @@ for(const file of eventFiles) {
     const event: IEvent = require(filePath).default;
 
     if(event.once)
-        client.once(event.name, (...args) => event.execute(...args));
+        client.once(event.name, (...args) => event.execute(client, ...args));
     else
-        client.on(event.name, (...args) => event.execute(...args));
+        client.on(event.name, (...args) => event.execute(client, ...args));
 }
 
 client.login(process.env.TOKEN);
