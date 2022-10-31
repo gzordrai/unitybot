@@ -1,6 +1,6 @@
 import { Events, Interaction } from "discord.js";
 import { ExtendedClient, IEvent } from "../bot";
-import { handleSlashCommand } from "../handlers";
+import { handleModal, handleSlashCommand } from "../handlers";
 
 const event: IEvent = {
     name: Events.InteractionCreate,
@@ -9,11 +9,11 @@ const event: IEvent = {
         if(interaction.isButton())
             console.log("Button !");
         else if(interaction.isCommand())
-            handleSlashCommand(client, interaction);
+            await handleSlashCommand(client, interaction);
         else if(interaction.isContextMenuCommand())
             console.log("Menu !");
         else if(interaction.isModalSubmit())
-            console.log("Modal !");
+            await handleModal(client, interaction);
     },
 };
 
