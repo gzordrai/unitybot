@@ -1,57 +1,54 @@
-import { ApplicationCommandType, CommandInteraction, Client, CommandInteractionOption, CacheType, ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
-import { JsonDB } from "node-json-db";
-import { ICommand } from "../ICommand";
+import { ActionRowBuilder, CommandInteraction, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ExtendedClient, ICommand } from "../bot";
 
-export const test: ICommand = {
-    name: "presentation",
-    description: "votre présentation aux membres du discord",
-    type: ApplicationCommandType.ChatInput,
-    options: [
-        {
-            name: "metier_etudes",
-            description: "Votre metier et/ou vos études",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        },
-        {
-            name: "a_propos",
-            description: "Une petite presentation de vous",
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            min_length: 30
-        },
-        {
-            name: "xp_unity",
-            description: "Votre experience sur unity",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        },
-        {
-            name: "but",
-            description: "Votre but sur le discord",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        }
-    ],
-    run: async (client: Client, interaction: CommandInteraction, database: JsonDB) => {
-        const data: readonly CommandInteractionOption<CacheType>[] = interaction.options.data;
+export const command: ICommand = {
+    data: new SlashCommandBuilder()
+        .setName("presentation")
+        .setDescription("Le dépot git du bot"),
+    async execute(client: ExtendedClient, interaction: CommandInteraction): Promise<void> {
+        const modal: ModalBuilder = new ModalBuilder()
+            .setCustomId("presentation")
+            .setTitle("Votre présentation");
 
-        if(interaction.channel?.id !== process.env.PRESENTATION_CHANNEL_ID)
-            return await interaction.followUp({ content: "Vous n'êtes pas dans le channel de présentation !", ephemeral: true });
+        const job: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
+        .addComponents(
+            new TextInputBuilder()
+                .setCustomId("job")
+                .setLabel("Quel est votre metier et/ou vos études ?")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+        );
 
-        const embed: EmbedBuilder = new EmbedBuilder()
-            .setColor("Blue")
-            .setTitle(`Présentation de ${interaction.user.username}`)
-            .setThumbnail(interaction.user.displayAvatarURL())
-            .addFields(
-                { name : "Métier et études:", value: `${data[0].value}`},
-                { name : "Qui êtes vous:", value: `${data[1].value}`},
-                { name : "XP Unity :", value: `${data[2].value}`},
-                { name : "But sur le discord :", value: `${data[3].value}`}
-            );
+        const presentation: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
+        .addComponents(
+            new TextInputBuilder()
+                .setCustomId("presentation")
+                .setLabel("Une présentation de vous")
+                .setStyle(TextInputStyle.Paragraph)
+                .setRequired(true)
+        );
 
-        database.push(`/${interaction.user.id}/presentation`, true, true);
+        const xp: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
+        .addComponents(
+            new TextInputBuilder()
+                .setCustomId("xp")
+                .setLabel("Quelle est votre experience sur Unity ?")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+        );
 
-        return await interaction.followUp({ embeds: [embed] });
+        const goal: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
+        .addComponents(
+            new TextInputBuilder()
+                .setCustomId("goal")
+                .setLabel("Quel est votre but sur le discord ?")
+                .setStyle(TextInputStyle.Paragraph)
+                .setRequired(true)
+        );
+
+        modal.addComponents(job, presentation, xp, goal);
+        await interaction.showModal(modal);
     }
 }
+
+export default command;
