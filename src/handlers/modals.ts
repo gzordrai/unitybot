@@ -13,7 +13,7 @@ const presentationModal = async (client: ExtendedClient, interaction: ModalSubmi
     const fields: ModalSubmitFields = interaction.fields;
     const embed: EmbedBuilder = new EmbedBuilder()
         .setColor("Blue")
-        .setTitle(`Présentation de <@${interaction.user.username}>`)
+        .setTitle(`Présentation de ${interaction.user.username}`)
         .setThumbnail(interaction.user.displayAvatarURL())
         .addFields(
             { name : "Métier et études:", value: fields.getTextInputValue("job") },
