@@ -21,6 +21,7 @@ const presentationModal = async (client: ExtendedClient, interaction: ModalSubmi
             { name : "XP Unity :", value: fields.getTextInputValue("xp") },
             { name : "But sur le discord :", value: fields.getTextInputValue("goal") }
         );
-    
+
+    await client.database.push(`/${interaction.user.id}/presentation`, true);
     await interaction.followUp({ embeds: [embed] });
 }

@@ -1,4 +1,5 @@
 import { Events, Interaction } from "discord.js";
+import { IUser } from "../database";
 import { ExtendedClient, IEvent } from "../bot";
 import { handleModal, handleSlashCommand } from "../handlers";
 
@@ -6,6 +7,11 @@ const event: IEvent = {
     name: Events.InteractionCreate,
     once: false,
     async execute(client: ExtendedClient, interaction: Interaction): Promise<void> {
+        if(!(await client.database.exist(`/${interaction.user.id}`))) {
+            const user: IUser = { role: false, presentation: false };
+            await client.database.push(`/${interaction.user.id}`, user);
+        }
+
         if(interaction.isButton())
             console.log("Button !");
         else if(interaction.isCommand())
