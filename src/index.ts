@@ -19,18 +19,18 @@ const eventsPath: string = path.join(__dirname, "events");
 const commandFiles: Array<string> = readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 const eventFiles: Array<string> = readdirSync(eventsPath).filter(file => file.endsWith(".js"));
 
-for(const file of commandFiles) {
+for (const file of commandFiles) {
     const filePath: string = path.join(commandsPath, file);
     const command: ICommand = require(filePath).default;
 
     client.commands.set(command.data.name, command);
 }
 
-for(const file of eventFiles) {
+for (const file of eventFiles) {
     const filePath: string = path.join(eventsPath, file);
     const event: IEvent = require(filePath).default;
 
-    if(event.once)
+    if (event.once)
         client.once(event.name, (...args) => event.execute(client, ...args));
     else
         client.on(event.name, (...args) => event.execute(client, ...args));
