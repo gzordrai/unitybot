@@ -10,7 +10,7 @@ export class Logger {
 
     private update(message: string): void {
         appendFile(this.path, `\n[${new Date()}] ${message}`, (err) => {
-            if(err) throw err;
+            if (err) throw err;
         })
     }
 
