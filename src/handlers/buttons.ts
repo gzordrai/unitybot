@@ -9,7 +9,7 @@ export const handleButton = async (client: ExtendedClient, interaction: ButtonIn
 const roleButton = async (client: ExtendedClient, interaction: ButtonInteraction): Promise<void> => {
     let message: string = '-';
 
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     if(interaction.inCachedGuild()) {
         const roleId: string = interaction.customId.split('-')[1];
