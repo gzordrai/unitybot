@@ -1,7 +1,7 @@
 import { Events, Interaction } from "discord.js";
 import { IUser } from "../database";
 import { ExtendedClient, IEvent } from "../bot";
-import { handleModal, handleSlashCommand } from "../handlers";
+import { handleButton, handleModal, handleSlashCommand } from "../handlers";
 
 const event: IEvent = {
     name: Events.InteractionCreate,
@@ -13,7 +13,7 @@ const event: IEvent = {
         }
 
         if(interaction.isButton())
-            console.log("Button !");
+            await handleButton(client, interaction);
         else if(interaction.isCommand())
             await handleSlashCommand(client, interaction);
         else if(interaction.isContextMenuCommand())
