@@ -7,7 +7,7 @@ export const handleSlashCommand = async (client: ExtendedClient, interaction: Co
     const command: ICommand = client.commands.get(interaction.commandName)!;
 
     try {
-        if(!modalCommands.includes(interaction.commandName)) {
+        if (!modalCommands.includes(interaction.commandName)) {
             await interaction.deferReply();
             client.logger.info(`${interaction.user.username} executed /${interaction.commandName} command`);
             await command.execute(client, interaction);
