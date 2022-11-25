@@ -1,22 +1,19 @@
-import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import { ExtendedClient, ICommand } from "../bot";
+import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { Command } from "../bot";
 
-export const command: ICommand = {
+export const command: Command = {
     data: new SlashCommandBuilder()
         .setName("git")
-        .setDescription("Le dépot git du bot"),
-    async execute(client: ExtendedClient, interaction: CommandInteraction): Promise<void> {
-        const avatarURL: string = interaction.guild?.members.cache.get(process.env.OWNER_ID!)?.displayAvatarURL()!;
-        const embed: EmbedBuilder = new EmbedBuilder()
-            .setColor("Blue")
-            .setTitle("UnityBot")
-            .setURL("https://github.com/gzordrai/UnityBot")
-            .setAuthor({ name: "gzordrai", iconURL: avatarURL, url: "https://github.com/gzordrai" })
+        .setDescription("Le dépot github du bot"),
 
-        await interaction.followUp({
-            ephemeral: true,
-            embeds: [embed]
-        });
+    async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+        const embed: EmbedBuilder = new EmbedBuilder();
+        
+        embed.setColor("Blue");
+        embed.setTitle(interaction.client.user.username);
+        embed.setURL("https://github.com/gzordrai/UnityBot");
+
+        await interaction.followUp({ embeds: [embed] });
     }
 }
 
