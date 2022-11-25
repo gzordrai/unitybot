@@ -1,52 +1,51 @@
-import { ActionRowBuilder, CommandInteraction, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import { ExtendedClient, ICommand } from "../bot";
+import { ActionRowBuilder, ChatInputCommandInteraction, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { Command } from "../bot";
 
-export const command: ICommand = {
+export const command: Command = {
     data: new SlashCommandBuilder()
         .setName("presentation")
-        .setDescription("Le dépot git du bot"),
-    async execute(client: ExtendedClient, interaction: CommandInteraction): Promise<void> {
-        const modal: ModalBuilder = new ModalBuilder()
-            .setCustomId("presentation")
-            .setTitle("Votre présentation");
+        .setDescription("Présentez-vous auprès de la communauté"),
 
-        const job: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
-        .addComponents(
+    async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+        const modal: ModalBuilder = new ModalBuilder()
+        const job: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>();
+        const presentation: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>();
+        const experience: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>();
+        const goal: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>();
+
+        job.addComponents(
             new TextInputBuilder()
                 .setCustomId("job")
                 .setLabel("Quel est votre metier et/ou vos études ?")
-                .setStyle(TextInputStyle.Short)
+                .setMinLength(5)
                 .setRequired(true)
+                .setStyle(TextInputStyle.Short)
         );
 
-        const presentation: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
-        .addComponents(
+        presentation.addComponents(
             new TextInputBuilder()
                 .setCustomId("presentation")
                 .setLabel("Une présentation de vous")
+                .setMaxLength(1024)
+                .setMinLength(30)
+                .setRequired(true)
                 .setStyle(TextInputStyle.Paragraph)
-                .setRequired(true)
         );
 
-        const xp: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
-        .addComponents(
+        experience.addComponents(
             new TextInputBuilder()
-                .setCustomId("xp")
-                .setLabel("Quelle est votre experience sur Unity ?")
-                .setStyle(TextInputStyle.Short)
+                .setCustomId("experience")
+                .setLabel("Quelle est votre expérience sur Unity ?")
+                .setMaxLength(1024)
+                .setMinLength(1)
                 .setRequired(true)
-        );
-
-        const goal: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>()
-        .addComponents(
-            new TextInputBuilder()
-                .setCustomId("goal")
-                .setLabel("Quel est votre but sur le discord ?")
                 .setStyle(TextInputStyle.Paragraph)
-                .setRequired(true)
         );
 
-        modal.addComponents(job, presentation, xp, goal);
+        modal.setCustomId("presentation");
+        modal.setTitle("Votre présentation");
+        modal.addComponents(job, presentation, experience, goal);
+
         await interaction.showModal(modal);
     }
 }
