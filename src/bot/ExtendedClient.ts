@@ -1,10 +1,6 @@
 import { Client, Collection } from "discord.js";
-import { Database } from "../database/Database";
-import { Logger } from "../util";
-import { ICommand } from "./ICommand";
+import { Command } from "./Command";
 
 export class ExtendedClient extends Client {
-    public commands: Collection<string, ICommand> = new Collection<string, ICommand>;
-    public database: Database = new Database("../../data/database.json");
-    public logger: Logger = new Logger("../log/UnityBot.log");
+    public commands: Collection<string, Command> = new Collection<string, Command>();
 }
