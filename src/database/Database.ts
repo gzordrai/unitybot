@@ -1,24 +1,55 @@
 import { Config, JsonDB } from "node-json-db";
 import path from "path";
+import { JSONUser } from "./JSON";
+import { User } from "./User";
 
 export class Database {
-    private database: JsonDB;
-    private path: string;
+    private static users: JsonDB = new JsonDB(new Config(path.resolve(__dirname, "../../data/users.json"), true, true, '/'));
 
-    public constructor(p: string) {
-        this.path = path.resolve(__dirname, p);
-        this.database = new JsonDB(new Config(this.path, true, false, '/'));
+    /**
+     * Add a new user to the database
+     * 
+     * @param id user id
+     * @returns added user
+     */
+    public static async addUser(id: string): Promise<User> {
+        const user: User = new User(id);
+
+        Database.save(user);
+
+        return user;
     }
 
-    public async exist(path: string): Promise<boolean> {
-        return await this.database.exists(path);
+    /**
+     * Retrieves user data from the database
+     * 
+     * @param id user id
+     * @returns user data
+     */
+    public static async getUser(id: string): Promise<User> {
+        const data: JSONUser = await this.users.getData(`/${id}`);
+
+        return new User(id, data.presentation, data.role);
     }
 
-    public async get(path: string): Promise<any> {
-        return await this.database.getData(path);
+    /**
+     * Check if the user is in the database
+     * 
+     * @param id user id
+     * @returns true if the user has an account in the database otherwise false
+     */
+    public static async has(id: string): Promise<boolean> {
+        if (await this.users.exists(`/${id}`))
+            return true;
+        return false;
     }
 
-    public async push(path: string, data: any): Promise<void> {
-        await this.database.push(path, data, true);
+    /**
+     * Save a user in the database
+     * 
+     * @param user user to be save
+     */
+    public static async save(user: User): Promise<void> {
+        await this.users.push(`/${user.getId()}`, user.toJSON(), true);
     }
 }
