@@ -1,16 +1,17 @@
 import { REST, RESTPostAPIApplicationCommandsJSONBody, Routes } from "discord.js";
 import { config } from "dotenv";
 import { readdirSync } from "fs";
-import { ICommand } from "./bot/ICommand";
+import path from "path";
+import { Command } from "./bot";
 
-config({ path: "../.env" });
+config({ path: path.join(__dirname, "../.env") });
 
 const rest: REST = new REST({ version: '10' }).setToken(process.env.TOKEN!);
 const commands: Array<RESTPostAPIApplicationCommandsJSONBody> = new Array<RESTPostAPIApplicationCommandsJSONBody>();
-const commandFiles: Array<string> = readdirSync('./commands').filter((file: string) => file.endsWith('.js'));
+const commandFiles: Array<string> = readdirSync(path.join(__dirname, "./commands")).filter((file: string) => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    const command: ICommand = require(`./commands/${file}`).default;
+    const command: Command = require(path.join(__dirname, `./commands/${file}`)).default;
     commands.push(command.data.toJSON());
 }
 
