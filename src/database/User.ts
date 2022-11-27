@@ -50,6 +50,24 @@ export class User {
     }
 
     /**
+     * Set the status of the user presentation
+     * 
+     * @param status presentation status
+     */
+    public setPresentationStatus(status: boolean): void {
+        this.presentation = status;
+    }
+
+    /**
+     * Set the status of the user on assignment of a role
+     * 
+     * @param status role status
+     */
+    public setRoleStatus(status: boolean): void {
+        this.role = status;
+    }
+
+    /**
      * The data of the user intended to be stored in a .json
      * 
      * @returns user data
