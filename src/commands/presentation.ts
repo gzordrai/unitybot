@@ -42,6 +42,16 @@ export const command: Command = {
                 .setStyle(TextInputStyle.Paragraph)
         );
 
+        goal.addComponents(
+            new TextInputBuilder()
+                .setCustomId("goal")
+                .setLabel("Quelle est votre but sur le discord ?")
+                .setMaxLength(1024)
+                .setMinLength(1)
+                .setRequired(true)
+                .setStyle(TextInputStyle.Paragraph)
+        )
+
         modal.setCustomId("presentation");
         modal.setTitle("Votre présentation");
         modal.addComponents(job, presentation, experience, goal);
