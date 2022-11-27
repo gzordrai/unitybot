@@ -50,7 +50,7 @@ export const command: Command = {
                 .setMinLength(1)
                 .setRequired(true)
                 .setStyle(TextInputStyle.Paragraph)
-        )
+        );
 
         modal.setCustomId("presentation");
         modal.setTitle("Votre présentation");
