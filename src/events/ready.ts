@@ -1,7 +1,7 @@
 import { Events } from "discord.js";
-import { ExtendedClient, IEvent } from "src/bot";
+import { ExtendedClient, Event } from "src/bot";
 
-const event: IEvent = {
+const event: Event = {
     name: Events.ClientReady,
     once: true,
     async execute(client: ExtendedClient): Promise<void> {
