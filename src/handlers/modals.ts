@@ -1,27 +1,30 @@
 import { EmbedBuilder, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
-import { ExtendedClient } from "../bot";
+import { Database, User } from "../database";
 
-export const handleModal = async (client: ExtendedClient, interaction: ModalSubmitInteraction): Promise<void> => {
+export const handleModal = async (interaction: ModalSubmitInteraction, user: User): Promise<void> => {
     await interaction.deferReply();
 
     switch (interaction.customId) {
-        case "presentation": presentationModal(client, interaction); break;
+        case "presentation": presentationModal(interaction, user); break;
     }
 }
 
-const presentationModal = async (client: ExtendedClient, interaction: ModalSubmitInteraction): Promise<void> => {
+const presentationModal = async (interaction: ModalSubmitInteraction, user: User): Promise<void> => {
     const fields: ModalSubmitFields = interaction.fields;
-    const embed: EmbedBuilder = new EmbedBuilder()
-        .setColor("Blue")
-        .setTitle(`Présentation de ${interaction.user.username}`)
-        .setThumbnail(interaction.user.displayAvatarURL())
-        .addFields(
-            { name: "Métier et études:", value: fields.getTextInputValue("job") },
-            { name: "Qui êtes vous:", value: fields.getTextInputValue("presentation") },
-            { name: "XP Unity :", value: fields.getTextInputValue("xp") },
-            { name: "But sur le discord :", value: fields.getTextInputValue("goal") }
-        );
+    const embed: EmbedBuilder = new EmbedBuilder();
 
-    await client.database.push(`/${interaction.user.id}/presentation`, true);
+    embed.setColor("Blue");
+    embed.setThumbnail(interaction.user.displayAvatarURL());
+    embed.setTitle(`Présentation de ${interaction.user.username}`);
+    embed.addFields(
+        { name: "Métier et études:", value: fields.getTextInputValue("job") },
+        { name: "Qui êtes vous:", value: fields.getTextInputValue("presentation") },
+        { name: "XP Unity :", value: fields.getTextInputValue("experience") },
+        { name: "But sur le discord :", value: fields.getTextInputValue("goal") }
+    );
+
+    user.setPresentationStatus(true);
+    Database.save(user);
+
     await interaction.followUp({ embeds: [embed] });
 }
