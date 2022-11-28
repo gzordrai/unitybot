@@ -1,14 +1,12 @@
 import { ButtonInteraction, GuildMemberRoleManager, Role } from "discord.js";
-import { ExtendedClient } from "../bot";
+import { Database, User } from "../database";
 
-export const handleButton = async (client: ExtendedClient, interaction: ButtonInteraction): Promise<void> => {
+export const handleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
     if (interaction.customId.startsWith("role-"))
-        roleButton(client, interaction);
+        roleButton(interaction, user);
 }
 
-const roleButton = async (client: ExtendedClient, interaction: ButtonInteraction): Promise<void> => {
-    let message: string = '-';
-
+const roleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
     await interaction.deferReply({ ephemeral: true });
 
     if (interaction.inCachedGuild()) {
@@ -16,18 +14,14 @@ const roleButton = async (client: ExtendedClient, interaction: ButtonInteraction
         const role: Role = interaction.guild!.roles.cache.get(roleId)!;
         const userRoles: GuildMemberRoleManager = interaction.member.roles;
 
-        message = `Le rôle ${role.name}`;
-
-        if (!userRoles.cache.get(role.id)) {
+        if (!userRoles.cache.get(role.id))
             userRoles.add(role);
-            message += " a été ajouté avec succès !";
-        } else {
+        else
             userRoles.remove(role);
-            message += " a été supprimé avec succès !";
-        }
 
-        client.database.push(`/${interaction.user.id}/role`, true);
+        user.setRoleStatus(true)
+        Database.save(user);
     }
 
-    await interaction.editReply({ content: message });
+    await interaction.editReply({ content: "Vos rôles ont été mis à jour !" });
 }
