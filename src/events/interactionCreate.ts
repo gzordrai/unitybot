@@ -1,25 +1,33 @@
-import { Events, Interaction } from "discord.js";
-import { IUser } from "../database";
-import { ExtendedClient, IEvent } from "../bot";
+import { Events, Interaction, Role } from "discord.js";
+import { Database, User } from "../database";
+import { ExtendedClient, Event } from "../bot";
 import { handleButton, handleModal, handleSlashCommand } from "../handlers";
 
-const event: IEvent = {
+const event: Event = {
     name: Events.InteractionCreate,
     once: false,
     async execute(client: ExtendedClient, interaction: Interaction): Promise<void> {
-        if(!(await client.database.exist(`/${interaction.user.id}`))) {
-            const user: IUser = { role: false, presentation: false };
-            await client.database.push(`/${interaction.user.id}`, user);
-        }
+        const userId: string = interaction.user.id;
+        let user: User;
 
-        if(interaction.isButton())
-            await handleButton(client, interaction);
-        else if(interaction.isCommand())
+        if (await Database.has(userId))
+            user = await Database.getUser(userId);
+        else
+            user = await Database.addUser(userId);
+
+        if (interaction.isButton())
+            await handleButton(interaction, user);
+        else if (interaction.isChatInputCommand())
             await handleSlashCommand(client, interaction);
-        else if(interaction.isContextMenuCommand())
-            console.log("Menu !");
-        else if(interaction.isModalSubmit())
-            await handleModal(client, interaction);
+        else if (interaction.isModalSubmit())
+            await handleModal(interaction, user);
+
+        if (interaction.inCachedGuild()) {
+            if ((await Database.getUser(userId)).isEligible()) {
+                const role: Role = interaction.guild.roles.cache.get(process.env.MEMBER_ROLE_ID!)!;
+                await interaction.member?.roles.add(role);
+            }
+        }
     },
 };
 
