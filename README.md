@@ -5,6 +5,17 @@ Discord bot allowing verification of new users, role assignment and administrati
 - Add roles with buttons
 - Presentation system
 
+## Config
+> .env file
+```
+CLIENT_ID = ""
+GUILD_ID = ""
+MEMBER_ROLE_ID = ""
+OWNER_ID = ""
+PRESENTATION_CHANNEL_ID = ""
+TOKEN = "BOT TOKEN"
+```
+
 ## Contributing
 1. [Fork the repository](https://github.com/gzordrai/UnityBot/fork) !
 2. Clone your fork: `git clone https://github.com/your-username/UnityBot.git`
