@@ -10,7 +10,7 @@ export const command: Command = {
                 .setDescription("L'utilisateur concerné par le conseil")
                 .setRequired(false)
         ),
-
+    modal: false,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const user: GuildMember | APIInteractionDataResolvedGuildMember | null = interaction.options.getMember("cible")
         let ret: string = "***Conseil pour partager son code:***\n";
