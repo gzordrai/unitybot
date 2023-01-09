@@ -7,8 +7,6 @@ export const handleButton = async (interaction: ButtonInteraction, user: User): 
 }
 
 const roleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
-    await interaction.deferReply({ ephemeral: true });
-
     if (interaction.inCachedGuild()) {
         const roleId: string = interaction.customId.split('-')[1];
         const role: Role = interaction.guild!.roles.cache.get(roleId)!;

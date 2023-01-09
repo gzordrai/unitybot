@@ -15,12 +15,18 @@ const event: Event = {
         else
             user = await Database.addUser(userId);
 
-        if (interaction.isButton())
-            await handleButton(interaction, user);
-        else if (interaction.isChatInputCommand())
+        if (interaction.isChatInputCommand()) {
+            if (!client.commands.get(interaction.commandName)!.modal)
+                await interaction.deferReply();
+
             await handleSlashCommand(client, interaction);
-        else if (interaction.isModalSubmit())
+        } else if (interaction.isButton()) {
+            await interaction.deferReply({ ephemeral: true });
+            await handleButton(interaction, user);
+        } else if (interaction.isModalSubmit()) {
+            await interaction.deferReply();
             await handleModal(interaction, user);
+        }
 
         if (interaction.inCachedGuild()) {
             if ((await Database.getUser(userId)).isEligible()) {

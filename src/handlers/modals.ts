@@ -2,8 +2,6 @@ import { EmbedBuilder, ModalSubmitFields, ModalSubmitInteraction } from "discord
 import { Database, User } from "../database";
 
 export const handleModal = async (interaction: ModalSubmitInteraction, user: User): Promise<void> => {
-    await interaction.deferReply();
-
     switch (interaction.customId) {
         case "presentation": presentationModal(interaction, user); break;
     }
