@@ -2,9 +2,9 @@
   "name": "unitybot",
   "version": "1.0.0",
   "description": "Discord bot for the Unity 3D Francophone server",
-  "main": "bot.ts",
+  "main": "index.ts",
   "scripts": {
-    "start": "ts-node src/bot.ts"
+    "start": "cd src && ts-node ./index.ts"
   },
   "repository": "https://github.com/gzordrai/UnityBot",
   "author": "gzordrai <40698142+gzordrai@users.noreply.github.com>",
