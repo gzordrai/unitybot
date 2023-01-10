@@ -10,15 +10,17 @@ const event: Event = {
         const userId: string = interaction.user.id;
         let user: User;
 
+        if (interaction.isChatInputCommand()) {
+            if (!client.commands.get(interaction.commandName)!.modal)
+                await interaction.deferReply();
+        }
+
         if (await Database.has(userId))
             user = await Database.getUser(userId);
         else
             user = await Database.addUser(userId);
 
         if (interaction.isChatInputCommand()) {
-            if (!client.commands.get(interaction.commandName)!.modal)
-                await interaction.deferReply();
-
             await handleSlashCommand(client, interaction);
         } else if (interaction.isButton()) {
             await interaction.deferReply({ ephemeral: true });
