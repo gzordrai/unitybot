@@ -13,22 +13,22 @@ const event: Event = {
         if (interaction.isChatInputCommand()) {
             if (!client.commands.get(interaction.commandName)!.modal)
                 await interaction.deferReply();
-        }
+        } else if (interaction.isModalSubmit())
+            await interaction.deferReply();
+        else if (interaction.isButton())
+            await interaction.deferReply({ ephemeral: true });
 
         if (await Database.has(userId))
             user = await Database.getUser(userId);
         else
             user = await Database.addUser(userId);
 
-        if (interaction.isChatInputCommand()) {
+        if (interaction.isChatInputCommand())
             await handleSlashCommand(client, interaction);
-        } else if (interaction.isButton()) {
-            await interaction.deferReply({ ephemeral: true });
+        else if (interaction.isButton())
             await handleButton(interaction, user);
-        } else if (interaction.isModalSubmit()) {
-            await interaction.deferReply();
+        else if (interaction.isModalSubmit())
             await handleModal(interaction, user);
-        }
 
         if (interaction.inCachedGuild()) {
             if ((await Database.getUser(userId)).isEligible()) {
