@@ -22,7 +22,7 @@ const presentationModal = async (interaction: ModalSubmitInteraction, user: User
     );
 
     user.setPresentationStatus(true);
-    Database.save(user);
+    await Database.save(user);
 
     await interaction.followUp({ embeds: [embed] });
 }

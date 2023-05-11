@@ -18,7 +18,7 @@ const roleButton = async (interaction: ButtonInteraction, user: User): Promise<v
             userRoles.remove(role);
 
         user.setRoleStatus(true)
-        Database.save(user);
+        await Database.save(user);
     }
 
     await interaction.editReply({ content: "Vos rôles ont été mis à jour !" });
