@@ -15,7 +15,7 @@ export class Database {
     public static async addUser(id: string): Promise<User> {
         const user: User = new User(id);
 
-        Database.save(user);
+        await Database.save(user);
 
         return user;
     }

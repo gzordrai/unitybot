@@ -3,7 +3,7 @@ import { Database, User } from "../database";
 
 export const handleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
     if (interaction.customId.startsWith("role-"))
-        roleButton(interaction, user);
+        await roleButton(interaction, user);
 }
 
 const roleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
