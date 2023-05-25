@@ -17,7 +17,7 @@ const roleButton = async (interaction: ButtonInteraction, user: User): Promise<v
         else
             userRoles.remove(role);
 
-        user.setRoleStatus(true)
+        user.setRoleStatus(true);
         await Database.save(user);
     }
 
