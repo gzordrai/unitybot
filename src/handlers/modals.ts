@@ -3,7 +3,7 @@ import { Database, User } from "../database";
 
 export const handleModal = async (interaction: ModalSubmitInteraction, user: User): Promise<void> => {
     switch (interaction.customId) {
-        case "presentation": presentationModal(interaction, user); break;
+        case "presentation": await presentationModal(interaction, user); break;
     }
 }
 
