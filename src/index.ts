@@ -10,9 +10,7 @@ const client: ExtendedClient = new ExtendedClient({
     intents: [
         GatewayIntentBits.Guilds
     ],
-    partials: [
-
-    ]
+    partials: []
 });
 const commandsPath: string = path.join(__dirname, "commands");
 const eventsPath: string = path.join(__dirname, "events");
