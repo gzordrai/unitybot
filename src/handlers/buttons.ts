@@ -1,12 +1,11 @@
 import { ButtonInteraction, GuildMemberRoleManager, Role } from "discord.js";
-import { Database, User } from "../database";
 
-export const handleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
+export const handleButton = async (interaction: ButtonInteraction): Promise<void> => {
     if (interaction.customId.startsWith("role-"))
-        await roleButton(interaction, user);
+        await roleButton(interaction);
 }
 
-const roleButton = async (interaction: ButtonInteraction, user: User): Promise<void> => {
+const roleButton = async (interaction: ButtonInteraction): Promise<void> => {
     if (interaction.inCachedGuild()) {
         const roleId: string = interaction.customId.split('-')[1];
         const role: Role = interaction.guild!.roles.cache.get(roleId)!;
@@ -16,9 +15,6 @@ const roleButton = async (interaction: ButtonInteraction, user: User): Promise<v
             userRoles.add(role);
         else
             userRoles.remove(role);
-
-        user.setRoleStatus(true);
-        await Database.save(user);
     }
 
     await interaction.editReply({ content: "Vos rôles ont été mis à jour !" });
