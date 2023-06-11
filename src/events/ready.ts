@@ -1,5 +1,5 @@
 import { Events } from "discord.js";
-import { ExtendedClient, Event } from "src/bot";
+import { ExtendedClient, Event } from "../bot";
 
 const event: Event = {
     name: Events.ClientReady,
