@@ -1,13 +1,12 @@
 import { EmbedBuilder, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
-import { Database, User } from "../database";
 
-export const handleModal = async (interaction: ModalSubmitInteraction, user: User): Promise<void> => {
+export const handleModal = async (interaction: ModalSubmitInteraction): Promise<void> => {
     switch (interaction.customId) {
-        case "presentation": await presentationModal(interaction, user); break;
+        case "presentation": await presentationModal(interaction); break;
     }
 }
 
-const presentationModal = async (interaction: ModalSubmitInteraction, user: User): Promise<void> => {
+const presentationModal = async (interaction: ModalSubmitInteraction): Promise<void> => {
     const fields: ModalSubmitFields = interaction.fields;
     const embed: EmbedBuilder = new EmbedBuilder();
 
@@ -20,9 +19,6 @@ const presentationModal = async (interaction: ModalSubmitInteraction, user: User
         { name: "XP Unity :", value: fields.getTextInputValue("experience") },
         { name: "But sur le discord :", value: fields.getTextInputValue("goal") }
     );
-
-    user.setPresentationStatus(true);
-    await Database.save(user);
 
     await interaction.followUp({ embeds: [embed] });
 }
