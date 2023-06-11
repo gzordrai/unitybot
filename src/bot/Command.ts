@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, CommandInteraction, SlashCommandBuilder, S
 
 export interface Command {
     data: SlashCommandBuilder | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup"> | SlashCommandSubcommandsOnlyBuilder;
+    ephemeral: boolean;
     modal: boolean;
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }

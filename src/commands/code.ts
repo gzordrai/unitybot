@@ -10,6 +10,7 @@ export const command: Command = {
                 .setDescription("L'utilisateur concerné par le conseil")
                 .setRequired(false)
         ),
+    ephemeral: false,
     modal: false,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const user: GuildMember | APIInteractionDataResolvedGuildMember | null = interaction.options.getMember("cible")

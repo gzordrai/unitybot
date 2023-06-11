@@ -5,6 +5,7 @@ export const command: Command = {
     data: new SlashCommandBuilder()
         .setName("presentation")
         .setDescription("Présentez-vous auprès de la communauté"),
+    ephemeral: false,
     modal: true,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const modal: ModalBuilder = new ModalBuilder()

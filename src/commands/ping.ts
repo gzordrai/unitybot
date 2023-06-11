@@ -5,6 +5,7 @@ export const command: Command = {
     data: new SlashCommandBuilder()
         .setName("ping")
         .setDescription("Information sur la latence du bot"),
+    ephemeral: true,
     modal: false,
     async execute(interaction: ChatInputCommandInteraction): Promise<void> {
         const embed: EmbedBuilder = new EmbedBuilder();
