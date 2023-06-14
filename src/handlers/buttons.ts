@@ -12,9 +12,9 @@ const roleButton = async (interaction: ButtonInteraction): Promise<void> => {
         const userRoles: GuildMemberRoleManager = interaction.member.roles;
 
         if (!userRoles.cache.get(role.id))
-            userRoles.add(role);
+            await userRoles.add(role);
         else
-            userRoles.remove(role);
+            await userRoles.remove(role);
     }
 
     await interaction.editReply({ content: "Vos rôles ont été mis à jour !" });

@@ -40,7 +40,7 @@ const event: Event = {
                 if (user.isEligible()) {
                     const role: Role = interaction.guild.roles.cache.get(process.env.MEMBER_ROLE_ID!)!;
     
-                    interaction.member?.roles.add(role);
+                    await interaction.member?.roles.add(role);
                     client.pendingUsers.delete(userId);
                 }
             } catch (err: unknown) {
