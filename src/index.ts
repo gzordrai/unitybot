@@ -4,7 +4,7 @@ import { readdirSync } from "fs";
 import path from "path";
 import { ExtendedClient, Command, Event } from "./bot";
 
-config({ path: "../.env" });
+config({ path: path.join(__dirname, "../.env") });
 
 const client: ExtendedClient = new ExtendedClient({
     intents: [
