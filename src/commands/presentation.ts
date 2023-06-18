@@ -19,6 +19,7 @@ export const command: Command = {
                 .setCustomId("job")
                 .setLabel("Quel est votre metier et/ou vos études ?")
                 .setMinLength(5)
+                .setMaxLength(1024)
                 .setRequired(true)
                 .setStyle(TextInputStyle.Short)
         );
