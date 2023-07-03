@@ -1,12 +1,6 @@
 import { EmbedBuilder, ModalSubmitFields, ModalSubmitInteraction } from "discord.js";
 
 export const handleModal = async (interaction: ModalSubmitInteraction): Promise<void> => {
-    switch (interaction.customId) {
-        case "presentation": await presentationModal(interaction); break;
-    }
-}
-
-const presentationModal = async (interaction: ModalSubmitInteraction): Promise<void> => {
     const fields: ModalSubmitFields = interaction.fields;
     const embed: EmbedBuilder = new EmbedBuilder();
 
