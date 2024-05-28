@@ -1,13 +1,15 @@
-import { ActionRowBuilder, ChatInputCommandInteraction, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import { Command } from "../bot";
+import { BaseCommand, Command } from "azuria";
+import { BotConfig } from "../../config";
+import { ActionRowBuilder, CommandInteraction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
-export const command: Command = {
-    data: new SlashCommandBuilder()
-        .setName("presentation")
-        .setDescription("Présentez-vous auprès de la communauté"),
-    ephemeral: false,
-    modal: true,
-    async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+@Command({
+    name: "presentation",
+    description: "Présentez-vous auprès de la communauté"
+})
+export class Presentation extends BaseCommand<BotConfig> {
+    public readonly modal: boolean = true;
+
+    public async execute(interaction: CommandInteraction<"cached">): Promise<void> {
         const modal: ModalBuilder = new ModalBuilder()
         const job: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>();
         const presentation: ActionRowBuilder<TextInputBuilder> = new ActionRowBuilder<TextInputBuilder>();
@@ -61,5 +63,3 @@ export const command: Command = {
         await interaction.showModal(modal);
     }
 }
-
-export default command;
