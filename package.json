@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "cd src && ts-node ./index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts"
   },
   "repository": "https://github.com/gzordrai/UnityBot",
   "author": "gzordrai <40698142+gzordrai@users.noreply.github.com>",
