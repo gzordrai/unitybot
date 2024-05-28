@@ -4,7 +4,8 @@
   "description": "Discord bot for the Unity 3D Francophone server",
   "main": "index.ts",
   "scripts": {
-    "start": "cd src && ts-node ./index.ts"
+    "start": "cd src && ts-node ./index.ts",
+    "build": "tsc"
   },
   "repository": "https://github.com/gzordrai/UnityBot",
   "author": "gzordrai <40698142+gzordrai@users.noreply.github.com>",
