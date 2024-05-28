@@ -1,20 +1,27 @@
+import { AzuriaClient } from "azuria";
+import { format, transports } from "winston";
 import { GatewayIntentBits } from "discord.js";
-import { config } from "dotenv";
-import path from "path";
-import { ExtendedClient } from "./bot";
+import { API_KEY, BotConfig, DISCORD_TOKEN } from "./config";
 
-config({ path: path.join(__dirname, "../.env") });
+const client: AzuriaClient<BotConfig> = new AzuriaClient(
+    {
+        apiKey: API_KEY,
+        baseDir: __dirname,
+        intents: [
+            GatewayIntentBits.Guilds,
+        ],
+        partials: [],
+        loggerOptions: {
+            format: format.combine(
+                format.timestamp(),
+                format.json()
+            ),
+            transports: [
+                new transports.File({ filename: "combined.log" }),
+                new transports.Console()
+            ]
+        }
+    }
+);
 
-const client: ExtendedClient = new ExtendedClient({
-    intents: [
-        GatewayIntentBits.Guilds
-    ],
-    partials: []
-});
-
-(async () => {
-    await client.loadCommands();
-    await client.loadEvents();
-
-    client.login(process.env.TOKEN);
-})()
+client.start(DISCORD_TOKEN);
