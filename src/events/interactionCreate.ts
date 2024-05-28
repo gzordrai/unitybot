@@ -1,62 +1,70 @@
-import { Events, Interaction, Role } from "discord.js";
-import { User } from "../models";
-import { ExtendedClient, Event, Command } from "../bot";
-import { handleButton, handleModal } from "../handlers";
+import { BaseEvent, Event } from "azuria";
+import { ButtonInteraction, CommandInteraction, EmbedBuilder, GuildMember, Interaction, ModalSubmitInteraction, Role, Snowflake } from "discord.js";
+import { BotConfig } from "../config";
 
-const event: Event = {
-    name: Events.InteractionCreate,
-    once: false,
-    async execute(client: ExtendedClient, interaction: Interaction): Promise<void> {
-        const userId: string = interaction.user.id;
-
-        if (interaction.isButton()) {
-            console.log(`Button => ${((Date.now() - interaction.createdAt.getTime()) / 1000)}`);
-            await interaction.deferReply({ ephemeral: true });
-        } else if (interaction.isModalSubmit()) {
-            console.log(`Modal => ${((Date.now() - interaction.createdAt.getTime()) / 1000)}`);
-            await interaction.deferReply({ ephemeral: false });
-        } else if (interaction.isChatInputCommand()) {
-        const command: Command = client.commands.get(interaction.commandName)!;
-
-            if (!command.modal)
-                await interaction.deferReply({ ephemeral: command.ephemeral });
-
-            try {
-                await command.execute(interaction);
-            } catch (error) {
-                console.log(error);
-                await interaction.followUp({ content: "Une erreur inattendue s'est produite lors de l'éxecution de la commande", ephemeral: true });
-            }
-        }
-
-        if (!client.pendingUsers.has(interaction.user.id))
-            client.pendingUsers.set(userId, new User(userId));
-
-        const user: User = client.pendingUsers.get(userId)!;
-
+@Event("interactionCreate")
+export class InteractionCreate extends BaseEvent<BotConfig> {
+    public async execute(interaction: Interaction) {
         if (interaction.inCachedGuild()) {
             try {
-                if (interaction.isButton()) {
-                    await handleButton(interaction);
-
-                    user.setRoleStatus(true);
+                if (interaction.isCommand()) {
+                    await this.handleCommand(interaction);
+                } else if (interaction.isButton()) {
+                    await interaction.deferReply({ ephemeral: true });
+                    await this.handleButton(interaction);
                 } else if (interaction.isModalSubmit()) {
-                    await handleModal(interaction);
-
-                    user.setPresentationStatus(true);
+                    console.log("Modal submit");
+                    await interaction.deferReply({ ephemeral: false });
+                    await this.handleModalSubmit(interaction);
                 }
-
-                if (user.isEligible()) {
-                    const role: Role = interaction.guild.roles.cache.get(process.env.MEMBER_ROLE_ID!)!;
-
-                    await interaction.member?.roles.add(role);
-                    client.pendingUsers.delete(userId);
-                }
-            } catch (err: unknown) {
-                console.log(err);
+            } catch (error) {
+                this.client.logger.error(error);
             }
         }
-    },
-};
+    }
 
-export default event;
+    private async handleCommand(interaction: CommandInteraction<"cached">): Promise<void> {
+        const command = this.client.commands.get(interaction.commandName);
+
+        if (!command)
+            throw new Error("Command not found");
+
+        if (!command.modal)
+            await interaction.deferReply({ ephemeral: command.ephemeral ?? false });
+
+        command.execute(interaction);
+    }
+
+    private async handleButton(interaction: ButtonInteraction<"cached">): Promise<void> {
+        const member: GuildMember = interaction.member;
+
+        if (!member)
+            throw new Error("Member not found");
+
+        const roleId: string = interaction.customId.split('-')[1]; // Format: "role-<roleId>" (to change for just roleId)
+        const memberRoles: Snowflake[] = member.roles.cache.map((role: Role) => role.id);
+
+        if (memberRoles.includes(roleId))
+            member.roles.remove(roleId);
+        else
+            member.roles.add(roleId);
+
+        await interaction.followUp({ content: "Vos rôles ont été mis à jour" });
+    }
+
+    private async handleModalSubmit(interaction: ModalSubmitInteraction<"cached">): Promise<void> {
+        const fields = interaction.fields;
+        const embed: EmbedBuilder = new EmbedBuilder()
+            .setColor("Blue")
+            .setThumbnail(interaction.user.displayAvatarURL())
+            .setTitle(`Présentation de ${interaction.user.username}`)
+            .addFields(
+                { name: "Métier et études:", value: fields.getTextInputValue("job") },
+                { name: "Qui êtes vous:", value: fields.getTextInputValue("presentation") },
+                { name: "XP Unity :", value: fields.getTextInputValue("experience") },
+                { name: "But sur le discord :", value: fields.getTextInputValue("goal") }
+            );
+
+        await interaction.followUp({ embeds: [embed] });
+    }
+}
