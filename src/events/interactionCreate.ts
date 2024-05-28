@@ -4,7 +4,7 @@ import { BotConfig } from "../config";
 
 @Event("interactionCreate")
 export class InteractionCreate extends BaseEvent<BotConfig> {
-    public async execute(interaction: Interaction) {
+    public async execute(interaction: Interaction): Promise<void> {
         if (interaction.inCachedGuild()) {
             try {
                 if (interaction.isCommand()) {
