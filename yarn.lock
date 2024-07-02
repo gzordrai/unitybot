@@ -343,12 +343,7 @@ acorn-walk@^8.1.1:
   dependencies:
     acorn "^8.11.0"
 
-acorn@^8.11.0:
-  version "8.12.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.12.0.tgz#1627bfa2e058148036133b8d9b51a700663c294c"
-  integrity sha512-RTvkC4w+KNXrM39/lWCUaG0IbRkWdCv7W/IOW9oU6SawyxulvkQy5HQPVTKxEjczcUvapcrw3cFx/60VN/NRNw==
-
-acorn@^8.4.1, acorn@^8.9.0:
+acorn@^8.11.0, acorn@^8.4.1, acorn@^8.9.0:
   version "8.12.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.12.0.tgz#1627bfa2e058148036133b8d9b51a700663c294c"
   integrity sha512-RTvkC4w+KNXrM39/lWCUaG0IbRkWdCv7W/IOW9oU6SawyxulvkQy5HQPVTKxEjczcUvapcrw3cFx/60VN/NRNw==
@@ -409,14 +404,14 @@ axios@^1.6.8:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-azuria@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/azuria/-/azuria-1.0.3.tgz#426f9c7cec9cd2ae69116e8546e7ff993357a4b5"
-  integrity sha512-xKop0IVTMKVYDn0UoKT9uRaHKirzxUfIx/hzgOHIBMpy5lQKkZwTMpPYLIGZkKXkLBwKgf3bZkXcRcsNZ63OjA==
+azuria@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/azuria/-/azuria-1.0.4.tgz#f2c8907e8e17d4dd908698eed3ccec7e7ad986f6"
+  integrity sha512-fEWBtvcuax+AZ5e437S4mermT9DdnwSDEEX8Ar26j93d/0NCMH8srwD3nlUhNPT0Weg9lnt8lTvU0cVWClaB8w==
   dependencies:
     axios "^1.6.8"
     bufferutil "^4.0.8"
-    discord.js "^14.15.2"
+    discord.js "^14.15.3"
     dotenv "^16.4.5"
     socket.io-client "^4.7.5"
     utf-8-validate "^6.0.4"
@@ -577,7 +572,7 @@ discord-api-types@0.37.83:
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.37.83.tgz#a22a799729ceded8176ea747157837ddf4708b1f"
   integrity sha512-urGGYeWtWNYMKnYlZnOnDHm8fVRffQs3U0SpE8RHeiuLKb/u92APS8HoQnPTFbnXmY1vVnXjXO4dOxcAn3J+DA==
 
-discord.js@^14.15.2, discord.js@^14.15.3:
+discord.js@^14.15.3:
   version "14.15.3"
   resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-14.15.3.tgz#b2a67a1a4ef192be498fb8b6784224a42906f1be"
   integrity sha512-/UJDQO10VuU6wQPglA4kz2bw2ngeeSbogiIPx/TsnctfzV/tNf+q+i1HlgtX1OGpeOBpJH9erZQNO5oRM2uAtQ==

@@ -12,7 +12,7 @@
   "author": "gzordrai <40698142+gzordrai@users.noreply.github.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "azuria": "^1.0.3",
+    "azuria": "^1.0.4",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "eslint": "8.57",
