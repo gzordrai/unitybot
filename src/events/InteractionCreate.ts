@@ -1,23 +1,36 @@
+import { ButtonInteraction, Collection, CommandInteraction, EmbedBuilder, GuildMember, Interaction, ModalSubmitInteraction, Role, Snowflake } from "discord.js";
 import { BaseEvent, Event } from "azuria";
-import { ButtonInteraction, CommandInteraction, EmbedBuilder, GuildMember, Interaction, ModalSubmitInteraction, Role, Snowflake } from "discord.js";
-import { BotConfig } from "../config";
+import { BotConfig } from "@/config";
+import { User } from "@/types";
 
 @Event("interactionCreate")
 export class InteractionCreate extends BaseEvent<BotConfig> {
+    private readonly users: Collection<Snowflake, User> = new Collection();
+
     public async execute(interaction: Interaction): Promise<void> {
         if (interaction.inCachedGuild()) {
             try {
+                if (!this.users.has(interaction.user.id))
+                    this.users.set(interaction.user.id, { role: false, presentation: false });
+
                 if (interaction.isCommand()) {
                     await this.handleCommand(interaction);
                 } else if (interaction.isButton()) {
                     await interaction.deferReply({ ephemeral: true });
                     await this.handleButton(interaction);
-                } else if (interaction.isModalSubmit()) {
-                    console.log("Modal submit");
-                    await interaction.deferReply({ ephemeral: false });
+                } else if (interaction.isModalSubmit())
                     await this.handleModalSubmit(interaction);
+
+                const user = this.users.get(interaction.user.id);
+
+                if (user?.role && user?.presentation) {
+                    const roleId: Snowflake | undefined = this.client.configs.get(interaction.guildId)?.roles.member;
+
+                    if (roleId)
+                        interaction.member.roles.add(roleId);
                 }
             } catch (error) {
+                console.log(error);
                 this.client.logger.error(error);
             }
         }
@@ -44,15 +57,17 @@ export class InteractionCreate extends BaseEvent<BotConfig> {
         const roleId: string = interaction.customId.split('-')[1]; // Format: "role-<roleId>" (to change for just roleId)
         const memberRoles: Snowflake[] = member.roles.cache.map((role: Role) => role.id);
 
-        if (memberRoles.includes(roleId))
-            member.roles.remove(roleId);
-        else
+        if (!memberRoles.includes(roleId)) {
             member.roles.add(roleId);
+            this.setFieldToTrue(interaction.user.id, "role");
+        } else
+            member.roles.remove(roleId);
 
         await interaction.followUp({ content: "Vos rôles ont été mis à jour" });
     }
 
     private async handleModalSubmit(interaction: ModalSubmitInteraction<"cached">): Promise<void> {
+        const userId: Snowflake = interaction.user.id;
         const fields = interaction.fields;
         const embed: EmbedBuilder = new EmbedBuilder()
             .setColor("Blue")
@@ -65,6 +80,14 @@ export class InteractionCreate extends BaseEvent<BotConfig> {
                 { name: "But sur le discord :", value: fields.getTextInputValue("goal") }
             );
 
-        await interaction.followUp({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed] });
+        this.setFieldToTrue(userId, "presentation");
+    }
+
+    private setFieldToTrue(userId: Snowflake, field: keyof User) {
+        const user = this.users.get(userId);
+
+        if (user)
+            user[field] = true;
     }
 }
